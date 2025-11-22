@@ -4,7 +4,7 @@ function DailySpend() {
   const [spends, setSpends] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/daily-spend/")
+    fetch("http://localhost:5001/daily-spend/")
       .then((res) => res.json())
       .then((data) => setSpends(data))
       .catch((err) => console.error(err));

@@ -20,7 +20,7 @@ function SummaryStats() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/summary/")
+    fetch("http://localhost:5001/summary/")
       .then((response) => response.json())
       .then((data) => {
         setSummary(data);

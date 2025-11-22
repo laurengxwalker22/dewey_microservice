@@ -16,18 +16,19 @@ DB_SERVER = os.getenv("DB_SERVER")
 DB_NAME = os.getenv("DB_NAME")
 DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_DRIVER = os.getenv("DB_DRIVER")
 
 # Build connection string
 CONNECTION_STRING = f"""
-Driver=/usr/local/lib/libmsodbcsql.18.dylib;
-Server={DB_SERVER};
-Database={DB_NAME};
-Uid={DB_USER};
-Pwd={DB_PASSWORD};
-Encrypt=yes;
-TrustServerCertificate=no;
-Connection Timeout=30;
-"""
+    Server={DB_SERVER};
+    Driver={DB_DRIVER};
+    Database={DB_NAME};
+    Uid={DB_USER};
+    Pwd={DB_PASSWORD};
+    Encrypt=yes;
+    TrustServerCertificate=no;
+    Connection Timeout=30;
+    """
 
 def get_connection():
     """Create a new database connection"""
@@ -85,13 +86,17 @@ def fetch_as_dicts(cursor):
 
 def normalize_keys(row):
     return {k.lower(): v for k, v in row.items()}
-'''
+@app.route("/")
+def home():
+    print("Home endpoint hit!")
+    return jsonify({"status": "alive"})
+
 @app.route("/brands/")
 def get_brands():
     limit = request.args.get("limit", default=10, type=int)
     limit = max(1, min(limit, 1000))
     query = f"SELECT TOP {limit} * FROM dbo.BrandDetails;"
-    result = fetch_as_dicts(execute_query(query))
+    result = execute_query(query)
     if result is None:
         return jsonify({"error": "Database error"}), 500
     return jsonify(result)
@@ -101,11 +106,11 @@ def get_daily_spend():
     limit = request.args.get("limit", default=10, type=int)
     limit = max(1, min(limit, 1000))
     query = f"SELECT TOP {limit} * FROM dbo.BrandTransactions ORDER BY SPEND_AMOUNT DESC;"
-    result = fetch_as_dicts(execute_query(query))
+    result = execute_query(query)
     if result is None:
         return jsonify({"error": "Database error"}), 500
     return jsonify(result)
-'''
+
 @app.route("/summary/")
 def get_summary():
     try:
