@@ -4,7 +4,7 @@ function BrandList() {
   const [brands, setBrands] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5001/brands/")
+    fetch("http://localhost:5000/brands/")
       .then((res) => res.json())
       .then((data) => setBrands(data))
       .catch((err) => console.error(err));

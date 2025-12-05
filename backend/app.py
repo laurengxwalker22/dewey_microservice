@@ -86,6 +86,8 @@ def fetch_as_dicts(cursor):
 
 def normalize_keys(row):
     return {k.lower(): v for k, v in row.items()}
+
+
 @app.route("/")
 def home():
     print("Home endpoint hit!")
@@ -96,20 +98,23 @@ def get_brands():
     limit = request.args.get("limit", default=10, type=int)
     limit = max(1, min(limit, 1000))
     query = f"SELECT TOP {limit} * FROM dbo.BrandDetails;"
-    result = execute_query(query)
+    result = fetch_as_dicts(execute_query(query))
     if result is None:
         return jsonify({"error": "Database error"}), 500
-    return jsonify(result)
+    
+    return result 
+
 
 @app.route("/daily-spend/")
 def get_daily_spend():
     limit = request.args.get("limit", default=10, type=int)
     limit = max(1, min(limit, 1000))
     query = f"SELECT TOP {limit} * FROM dbo.BrandTransactions ORDER BY SPEND_AMOUNT DESC;"
-    result = execute_query(query)
+    result = fetch_as_dicts(execute_query(query))
     if result is None:
         return jsonify({"error": "Database error"}), 500
-    return jsonify(result)
+    
+    return result 
 
 @app.route("/summary/")
 def get_summary():
@@ -120,8 +125,7 @@ def get_summary():
             SUM(SPEND_AMOUNT) AS total_spend,
             AVG(SPEND_AMOUNT) AS avg_transaction_amount,
             MAX(SPEND_AMOUNT) AS max_spend,
-            MIN(SPEND_AMOUNT) AS min_spend,
-            COUNT(*) AS num_transactions
+            MIN(SPEND_AMOUNT) AS min_spend
         FROM dbo.BrandTransactions;
         """
         overall_stats = execute_query(query_overall)

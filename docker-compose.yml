@@ -24,8 +24,8 @@ services:
     ports:
       - "3000:3000"  
     depends_on:
-      backend:
-        condition: service_healthy
+      - backend
+       
     restart: unless-stopped
 
 networks:

@@ -20,7 +20,7 @@ function SummaryStats() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5001/summary/")
+    fetch("http://localhost:5000/summary/")
       .then((response) => response.json())
       .then((data) => {
         setSummary(data);
@@ -64,10 +64,6 @@ function SummaryStats() {
             <td>Min Spend</td>
             <td>${formatCurrency(summary?.overall_stats?.min_spend)}</td>
           </tr>
-          <tr>
-            <td>Number of Transactions</td>
-            <td>{formatInteger(summary?.overall_stats?.num_transactions)}</td>
-          </tr>
         </tbody>
       </table>
 
@@ -79,7 +75,7 @@ function SummaryStats() {
             <th>Brand</th>
             <th>Total Spend</th>
             <th>Average Spend</th>
-            <th>Transactions</th>
+            <th>Number of Transactions</th>
           </tr>
         </thead>
         <tbody>
